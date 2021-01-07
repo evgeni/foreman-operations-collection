@@ -1,0 +1,4 @@
+---
+proxy_certs_generate_command: foreman-proxy-certs-generate
+proxy_certs_generate_certs_tar: "/root/{{ proxy_certs_generate_target }}.tar.gz"
+proxy_certs_generate_options: []

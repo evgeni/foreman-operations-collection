@@ -1,0 +1,44 @@
+---
+- name: Prepare
+  hosts: all
+  gather_facts: true
+  become: true
+  pre_tasks:
+    - name: 'Setup Foreman latest repository'
+      yum:
+        name: https://yum.theforeman.org/releases/latest/el{{ ansible_distribution_major_version }}/x86_64/foreman-release.rpm
+        disable_gpg_check: true
+        state: present
+
+    - name: 'Setup Katello latest repository'
+      yum:
+        name: https://fedorapeople.org/groups/katello/releases/yum/3.18/katello/el{{ ansible_distribution_major_version }}/x86_64/katello-repos-latest.rpm
+        disable_gpg_check: true
+        state: present
+
+    - name: enable pki-core module
+      command: dnf module -y enable pki-core
+      when: ansible_distribution_major_version == "8"
+      args:
+        warn: false # dnf module can't handle modules
+
+    - name: 'Setup Puppet 6 Repository'
+      yum:
+        name: https://yum.puppet.com/puppet6-release-el-{{ ansible_distribution_major_version }}.noarch.rpm
+        disable_gpg_check: true
+        state: present
+
+    - name: Install foreman-installer
+      package:
+        name:
+          - foreman-installer
+          - katello
+        state: present
+
+  roles:
+    - role: installer
+      vars:
+        installer_scenario: katello
+        installer_options:
+          - '--foreman-initial-admin-password changeme'
+          - '--disable-system-checks'

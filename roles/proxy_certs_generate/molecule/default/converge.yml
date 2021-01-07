@@ -1,0 +1,8 @@
+---
+- name: Converge
+  hosts: all
+  gather_facts: false
+  roles:
+    - role: proxy_certs_generate
+      vars:
+        proxy_certs_generate_target: proxy.example.com

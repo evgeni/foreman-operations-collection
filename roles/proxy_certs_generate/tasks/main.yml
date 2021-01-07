@@ -1,0 +1,14 @@
+---
+- name: Check that necessary variables are defined
+  assert:
+    that:
+      - proxy_certs_generate_target is defined
+
+- name: 'Run {{ proxy_certs_generate_command }}'
+  command: >
+    {{ proxy_certs_generate_command }}
+    --foreman-proxy-fqdn {{ proxy_certs_generate_target }}
+    --certs-tar {{ proxy_certs_generate_certs_tar }}
+    {{ proxy_certs_generate_options | join(' ') }}
+  args:
+    creates: "{{ proxy_certs_generate_certs_tar }}"
