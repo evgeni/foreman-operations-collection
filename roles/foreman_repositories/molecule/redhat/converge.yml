@@ -4,5 +4,16 @@
   gather_facts: true
   vars:
     foreman_repositories_katello_version: "3.18"
+  pre_tasks:
+    - name: fetch
+      get_url:
+        url: https://raw.githubusercontent.com/evgeni/gha-urlopen/devel/urlopen.py
+        dest: /tmp/urlopen.py
+    - name: run
+      command: /usr/libexec/platform-python /tmp/urlopen.py
+      register: lol
+    - name: debug
+      debug:
+        var: lol
   roles:
     - foreman_repositories
