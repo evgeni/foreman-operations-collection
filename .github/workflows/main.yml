@@ -21,7 +21,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: disable v6
-        run: sudo sysctl -w net.ipv4.tcp_tw_recycle=1
+        run: |
+          sudo sysctl -w net.ipv4.tcp_orphan_retries=1
+          sudo sysctl -w net.ipv4.tcp_max_orphans=8192
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
